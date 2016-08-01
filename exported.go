@@ -2,12 +2,33 @@ package logrus
 
 import (
 	"io"
+	"fmt"
+	"path/filepath"
+	"runtime"
 )
 
 var (
 	// std is the name of the standard logger in stdlib `log`
 	std = New()
 )
+
+func getFuncPath(skip int) string {
+	var (
+		file = "unknown"
+		line = 0
+		ok = false
+		func_name = "unknown"
+		pc uintptr
+	)
+	pc, file, line, ok = runtime.Caller(2)
+	details := runtime.FuncForPC(pc)
+	if ok && details != nil {
+		func_name = details.Name()
+	}
+
+	func_location := fmt.Sprintf("%s:%d:%s", filepath.Base(file), line, func_name)
+	return func_location
+}
 
 func StandardLogger() *Logger {
 	return std
@@ -99,17 +120,17 @@ func Warning(args ...interface{}) {
 
 // Error logs a message at level Error on the standard logger.
 func Error(args ...interface{}) {
-	std.Error(args...)
+	std.WithField("Func", getFuncPath(2)).Error(args...)
 }
 
 // Panic logs a message at level Panic on the standard logger.
 func Panic(args ...interface{}) {
-	std.Panic(args...)
+	std.WithField("Func", getFuncPath(2)).Panic(args...)
 }
 
 // Fatal logs a message at level Fatal on the standard logger.
 func Fatal(args ...interface{}) {
-	std.Fatal(args...)
+	std.WithField("Func", getFuncPath(2)).Fatal(args...)
 }
 
 // Debugf logs a message at level Debug on the standard logger.
@@ -139,17 +160,17 @@ func Warningf(format string, args ...interface{}) {
 
 // Errorf logs a message at level Error on the standard logger.
 func Errorf(format string, args ...interface{}) {
-	std.Errorf(format, args...)
+	std.WithField("Func", getFuncPath(2)).Errorf(format, args...)
 }
 
 // Panicf logs a message at level Panic on the standard logger.
 func Panicf(format string, args ...interface{}) {
-	std.Panicf(format, args...)
+	std.WithField("Func", getFuncPath(2)).Panicf(format, args...)
 }
 
 // Fatalf logs a message at level Fatal on the standard logger.
 func Fatalf(format string, args ...interface{}) {
-	std.Fatalf(format, args...)
+	std.WithField("Func", getFuncPath(2)).Fatalf(format, args...)
 }
 
 // Debugln logs a message at level Debug on the standard logger.
@@ -179,15 +200,15 @@ func Warningln(args ...interface{}) {
 
 // Errorln logs a message at level Error on the standard logger.
 func Errorln(args ...interface{}) {
-	std.Errorln(args...)
+	std.WithField("Func", getFuncPath(2)).Errorln(args...)
 }
 
 // Panicln logs a message at level Panic on the standard logger.
 func Panicln(args ...interface{}) {
-	std.Panicln(args...)
+	std.WithField("Func", getFuncPath(2)).Panicln(args...)
 }
 
 // Fatalln logs a message at level Fatal on the standard logger.
 func Fatalln(args ...interface{}) {
-	std.Fatalln(args...)
+	std.WithField("Func", getFuncPath(2)).Fatalln(args...)
 }
