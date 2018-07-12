@@ -1,3 +1,13 @@
+this is originally forked from github.com/sirupsen/logrus. with features:
+
+### Add Func field for Error and higher log level for default
+All Error*,Panic*,Fatal* log calls will add field "Func" to show the caller func, like this:
+
+```
+time="2018-07-12T11:09:20+08:00" level=error msg="accept error: accept tcp 127.0.0.1:56735: use of closed network connection" Func="listener.go:47:gitlab.com/thunderdb/ThunderDB/crypto/etls.(*CryptoListener).Accept"
+```
+
+
 # Logrus <img src="http://i.imgur.com/hTeVwmJ.png" width="40" height="40" alt=":walrus:" class="emoji" title=":walrus:"/>&nbsp;[![Build Status](https://travis-ci.org/sirupsen/logrus.svg?branch=master)](https://travis-ci.org/sirupsen/logrus)&nbsp;[![GoDoc](https://godoc.org/github.com/sirupsen/logrus?status.svg)](https://godoc.org/github.com/sirupsen/logrus)
 
 Logrus is a structured logger for Go (golang), completely API compatible with
